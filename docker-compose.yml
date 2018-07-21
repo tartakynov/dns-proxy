@@ -2,9 +2,20 @@ version: '3'
 
 services:
   dnsmasq:
-    build: dnsmasq-docker/.
+    build:
+      context: dnsmasq-docker/.
+      args:
+        external_ip: 192.168.1.50
+        proxy_domains: google.com akamai.net akamaiedge.net akadns.net akamaized.net
     ports:
       - "53:53/tcp"
       - "53:53/udp"
     cap_add:
       - NET_ADMIN
+    dns: 8.8.8.8
+  sniproxy:
+    build: sniproxy-docker/.
+    ports:
+      - "80:80/tcp"
+      - "443:443/tcp"
+    dns: 8.8.8.8
